@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstract\" />
+    <ProjectReference Include="..\Entities\Northwind.Entities.csproj" />
+    <ProjectReference Include="..\Northwind.DataAccess\Northwind.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Northwind.Entities.csproj" />
-    <ProjectReference Include="..\Northwind.DataAccess\Northwind.DataAccess.csproj" />
+    <Folder Include="ValidationRules\FluentValidation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="Ninject" Version="3.3.6" />
   </ItemGroup>
 
 </Project>

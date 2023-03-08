@@ -1,4 +1,9 @@
-﻿using Northwind.DataAccess.Concrete;
+﻿using FluentValidation;
+using Northwind.Business.Abstract;
+using Northwind.Business.Utilities;
+using Northwind.Business.ValidationRules;
+using Northwind.DataAccess.Abstract;
+using Northwind.DataAccess.Concrete.EntityFramework;
 using Northwind.Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -6,14 +11,53 @@ using System.Text;
 
 namespace Northwind.Business.Concrete
 {
-    public class ProductManager
+    public class ProductManager : IProductService
     {
-        ProductDal productDal = new ProductDal();
+        IProductDal _productDal;
+        public ProductManager(IProductDal productDal)
+        {
+            _productDal = productDal;
+        }
+
+        public void Add(Product product)
+        {
+            ValidationTool.Validate(new ProductValidator(),product);
+            _productDal.Add(product);
+        }
+
+        public void Delete(Product product)
+        {
+            try
+            {
+                _productDal.Delete(product);
+            }
+            catch (Exception)
+            {
+
+            }
+
+        }
+
         public List<Product> GetAll()
         {
             //Business Codes
 
-            return productDal.GetAll();
+            return _productDal.GetAll();
+        }
+
+        public List<Product> GetProductsByCategory(int categoryId)
+        {
+            return _productDal.GetAll(p => p.CategoryId == categoryId);
+        }
+
+        public List<Product> GetProductsByProductName(string productName)
+        {
+            return _productDal.GetAll(p => p.ProductName.ToLower().Contains(productName.ToLower()));
+        }
+
+        public void Update(Product product)
+        {
+            _productDal.Update(product);
         }
     }
 }
